@@ -50,7 +50,8 @@
         "sap.m": {},
         "sap.ui.core": {},
         "sap.ushell": {},
-        "sap.fe.templates": {}
+        "sap.fe.templates": {},
+        "sap.f": {}
       }
     },
     "contentDensities": {
@@ -82,17 +83,28 @@
       "css": []
     },
     "routing": {
-      "config": {},
+      "config": {
+        "flexibleColumnLayout": {
+          "defaultTwoColumnLayoutType": "TwoColumnsMidExpanded",
+          "defaultThreeColumnLayoutType": "ThreeColumnsMidExpanded"
+        },
+        "routerClass": "sap.f.routing.Router"
+      },
       "routes": [
         {
           "pattern": ":?query:",
           "name": "IncidentsList",
-          "target": "IncidentsList"
+          "target": [
+            "IncidentsList"
+          ]
         },
         {
           "pattern": "Incidents({key}):?query:",
           "name": "IncidentsObjectPage",
-          "target": "IncidentsObjectPage"
+          "target": [
+            "IncidentsList",
+            "IncidentsObjectPage"
+          ]
         }
       ],
       "targets": {
@@ -120,7 +132,9 @@
               },
               "initialLoad": "Enabled"
             }
-          }
+          },
+          "controlAggregation": "beginColumnPages",
+          "contextPattern": ""
         },
         "IncidentsObjectPage": {
           "type": "Component",
@@ -129,11 +143,33 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/Incidents"
+              "contextPath": "/Incidents",
+              "content": {
+                "body": {
+                  "sections": {
+                    "CustomSectionGantt": {
+                      "template": "sap.fe.demo.incidents.ext.fragment.CustomSectionGantt",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "IncidentOverviewFacet"
+                      },
+                      "title": "{i18n>maximumProcessingTime}"
+                    }
+                  }
+                }
+              }
             }
-          }
+          },
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Incidents({key})"
         }
       }
+    },
+    "rootView": {
+      "viewName": "sap.fe.templates.RootContainer.view.Fcl",
+      "type": "XML",
+      "async": true,
+      "id": "appRootView"
     }
   },
   "sap.fiori": {
